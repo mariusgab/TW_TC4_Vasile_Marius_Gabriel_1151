@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import RobotStore from '../stores/RobotStore'
 import Robot from './Robot'
 import RobotForm from './RobotForm'
@@ -7,30 +7,43 @@ function RobotList() {
 	var [robots, setRobots] = useState([]);
 	var store = useRef(null);
 
-	useEffect(function insideEffect() {
-		store = new RobotStore();
-		setRobots(store.getRobots());
+	const onAdd = useCallback(() => {
+		store.current.addRobot({
+			type: 'test_type',
+			name: 'test_name',
+			mass: 'test_mass'
+		});
+	}, []);
 
-		store.emitter.addListener("UPDATE", function listenToEvent() {
-			setRobots(store.getRobots());
+	useEffect(function insideEffect() {
+		store.current = new RobotStore();
+		setRobots(store.current.getRobots());
+
+		store.current.emitter.addListener("UPDATE", function listenToEvent() {
+			var robots = [];
+			store.current.robots.forEach(robot => {
+				robots.push(robot);
+			});
+			setRobots(robots);
 		});
 
 		return function cleanUp() {
-			store.emitter.removeAllListeners("UPDATE");
+			store.current.emitter.removeAllListeners("UPDATE");
 		}
 
-	}, [])
+	}, []);
+
 
 	return (
 		<div>
-
 			{
-				robots.map((e, i) =>
-					<Robot item={e} key={i} />
-				)
+				robots.map((robot, i) => <Robot item={robot} key={i} />)
 			}
+
+			<RobotForm onAdd={onAdd} />
 		</div>
-	)
+	);
+
 }
 
 export default RobotList

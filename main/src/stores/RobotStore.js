@@ -12,17 +12,17 @@ class RobotStore {
 			type: 'worker',
 			name: 'tom',
 			mass: 1500
-		}]
-		this.emitter = new EventEmitter()
+		}];
+		this.emitter = new EventEmitter();
 	}
 	addRobot(r) {
-		let maxId = this.robots.reduce((a, e) => a.id > e.id ? a : e, (robots[0] || {}));
-		r.id = maxId + 1;
+		let maxId = this.robots.reduce((a, e) => a.id > e.id ? a : e, (this.robots[0] || {}));
+		r.id = maxId.id + 1;
 		this.robots.push(r);
 		this.emitter.emit('UPDATE');
 	}
 	getRobots() {
-		return this.robots
+		return this.robots;
 	}
 }
 
