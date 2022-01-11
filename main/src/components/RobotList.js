@@ -7,11 +7,11 @@ function RobotList() {
 	var [robots, setRobots] = useState([]);
 	var store = useRef(null);
 
-	const onAdd = useCallback(() => {
+	const onAdd = useCallback((name, type, mass) => {
 		store.current.addRobot({
-			type: 'test_type',
-			name: 'test_name',
-			mass: 'test_mass'
+			type: type,
+			name: name,
+			mass: mass
 		});
 	}, []);
 
