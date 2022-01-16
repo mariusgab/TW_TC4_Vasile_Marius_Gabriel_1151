@@ -7,13 +7,9 @@ function RobotList() {
 	var [robots, setRobots] = useState([]);
 	var store = useRef(null);
 
-	const onAdd = useCallback((name, type, mass) => {
-		store.current.addRobot({
-			type: type,
-			name: name,
-			mass: mass
-		});
-	}, []);
+	const onAdd = (r) => {
+		store.current.addRobot(r);
+	}
 
 	useEffect(function insideEffect() {
 		store.current = new RobotStore();
